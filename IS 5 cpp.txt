@@ -1,0 +1,111 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <string>
+
+using namespace std;
+
+// Function to check if a number is prime
+bool isPrime(int n) {
+    if (n <= 1) return false;
+    if (n <= 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    for (int i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+    }
+    return true;
+}
+
+// Function to find gcd of two numbers
+int gcd(int a, int b) {
+    if (b == 0) return a;
+    return gcd(b, a % b);
+}
+
+// Function to find modular inverse of a number
+int modInverse(int a, int m) {
+    a = a % m;
+    for (int x = 1; x < m; x++) {
+        if ((a * x) % m == 1) return x;
+    }
+    return 1;
+}
+
+// Function to generate public and private keys
+void generateKeys(int& e, int& d, int& n) {
+    // Choose two distinct prime numbers
+    int p, q;
+    do {
+        p = rand() % 10 + 1;
+    } while (!isPrime(p));
+    do {
+        q = rand() % 10 + 1;
+    } while (!isPrime(q));
+
+    // Compute n
+    n = p * q;
+
+    // Compute phi(n)
+    int phi = (p - 1) * (q - 1);
+
+    // Choose an integer e such that 1 < e < phi and gcd(e, phi) = 1
+    do {
+        e = rand() % phi;
+    } while (gcd(e, phi) != 1);
+
+    // Compute d, the modular inverse of e modulo phi
+    d = modInverse(e, phi);
+}
+
+// Function to encrypt a message
+string encrypt(string message, int e, int n) {
+    string encrypted = "";
+    for (char c : message) {
+        int m = c;
+        int encryptedChar = pow(m, e);
+        encryptedChar = encryptedChar % n;
+        encrypted += to_string(encryptedChar) + " ";
+    }
+    return encrypted;
+}
+
+// Function to decrypt a message
+string decrypt(string encrypted, int d, int n) {
+    string decrypted = "";
+    int pos = 0;
+    while (pos < encrypted.length()) {
+        int encryptedChar = 0;
+        while (pos < encrypted.length() && encrypted[pos] != ' ') {
+            encryptedChar = encryptedChar * 10 + (encrypted[pos] - '0');
+            pos++;
+        }
+        pos++;
+        int decryptedChar = pow(encryptedChar, d);
+        decryptedChar = decryptedChar % n;
+        decrypted += char(decryptedChar);
+    }
+    return decrypted;
+}
+
+int main() {
+    srand(time(0));
+    int e, d, n;
+    generateKeys(e, d, n);
+    cout << "Public key (e, n): (" << e << ", " << n << ")" << endl;
+    cout << "Private key (d, n): (" << d << ", " << n << ")" << endl;
+
+    string message;
+    cout << "Enter message to encrypt: ";
+    getline(cin, message);
+    cout << "Original message: " << message << endl;
+
+    string encrypted = encrypt(message, e, n);
+    cout << "Encrypted message: " << encrypted << endl;
+
+    string decrypted = decrypt(encrypted, d, n);
+    cout << "Decrypted message: " << decrypted << endl;
+
+    return 0;
+}

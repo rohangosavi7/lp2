@@ -1,0 +1,26 @@
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+int main() {
+    char str[] = "Hello World";
+    int len = strlen(str);
+
+    // AND operation with 127
+    cout << "AND Result: ";
+    for (int i = 0; i < len; i++) {
+        cout << (char)(str[i] & 127);
+    }
+    cout << endl;
+
+    // XOR operation with 127
+    cout << "XOR Result: ";
+    for (int i = 0; i < len; i++) {
+        cout << (char)(str[i] ^ 127);
+    }
+    cout << endl;
+
+
+    return 0;
+}

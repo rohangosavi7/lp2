@@ -1,0 +1,46 @@
+<!-- Implement the Diffie-Hellman Key Exchange mechanism using HTML and JavaScript. Consider 
+the end user as one of the parties (Alice) and the JavaScript application as other party (bob)
+ -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diffie-Hellman Key Exchange</title>
+  </head>
+  <body>
+    <h1>Diffie-Hellman Key Exchange</h1>
+    <p>
+      Enter a prime number (p) and a primitive root (g) to generate the shared
+      secret key.
+    </p>
+    <form>
+      <label for="prime">Prime number (p):</label>
+      <input type="text" id="prime" name="prime" /><br /><br />
+      <label for="root">Primitive root (g):</label>
+      <input type="text" id="root" name="root" /><br /><br />
+      <button type="button" onclick="generateKeys()">Generate Keys</button>
+    </form>
+    <br />
+    <div id="alice"></div>
+    <br />
+    <div id="bob"></div>
+    <script>
+      function generateKeys() {
+        var p = parseInt(document.getElementById("prime").value);
+        var g = parseInt(document.getElementById("root").value);
+        var a = Math.floor(Math.random() * (p - 1)) + 1;
+        var A = Math.pow(g, a) % p;
+        var aliceDiv = document.getElementById("alice");
+        aliceDiv.innerHTML = "Alice's public key (A): " + A;
+        var b = Math.floor(Math.random() * (p - 1)) + 1;
+        var B = Math.pow(g, b) % p;
+        var bobDiv = document.getElementById("bob");
+        bobDiv.innerHTML = "Bob's public key (B): " + B;
+        var sharedKeyAlice = Math.pow(B, a) % p;
+        var sharedKeyBob = Math.pow(A, b) % p;
+        aliceDiv.innerHTML += "<br>Shared secret key: " + sharedKeyAlice;
+        bobDiv.innerHTML += "<br>Shared secret key: " + sharedKeyBob;
+      }
+    </script>
+  </body>
+</html>
