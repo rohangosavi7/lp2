@@ -5,7 +5,7 @@
 
 
 import ctypes  #It provides C compatible data types, and allows calling functions in 
-s = "Hello World"
+s = "/Hello World"
 and_result = ""
 or_result = ""
 xor_result = ""

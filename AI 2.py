@@ -1,4 +1,4 @@
-# # - Implement A star Algorithm for any game search problem.
+# Implement A star Algorithm for any game search problem.
 
 
 def aStarAlgo(start_node, stop_node):
